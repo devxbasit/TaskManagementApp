@@ -17,7 +17,11 @@ export class AuthService {
 
   signup(email, password) {
     const body = { email: email, password: password, returnSecureToken: true };
-    return this.httpClient.post<AuthResponse>(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebaseApiKey}`, body).pipe(
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebaseApiKey}`;
+    console.log(url);
+    console.log(body);
+    debugger;
+    return this.httpClient.post<AuthResponse>(url, body).pipe(
       catchError(this.handleError),
       tap((res) => {
         this.handleCreateUser(res);
@@ -27,7 +31,9 @@ export class AuthService {
 
   login(email, password) {
     const body = { email: email, password: password, returnSecureToken: true };
-    return this.httpClient.post<AuthResponse>(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.firebaseApiKey}`, body).pipe(
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.firebaseApiKey}`;
+    console.log(url);
+    return this.httpClient.post<AuthResponse>(url, body).pipe(
       catchError(this.handleError),
       tap((res) => {
         this.handleCreateUser(res);
@@ -76,7 +82,7 @@ export class AuthService {
   }
 
   private handleError(err) {
-    console.log(err);
+    console.log('error occured', err);
 
     let errorMessage = 'An unknown error has occurred';
 
