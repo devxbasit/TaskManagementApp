@@ -18,9 +18,6 @@ export class AuthService {
   signup(email, password) {
     const body = { email: email, password: password, returnSecureToken: true };
     const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebaseApiKey}`;
-    console.log(url);
-    console.log(body);
-    debugger;
     return this.httpClient.post<AuthResponse>(url, body).pipe(
       catchError(this.handleError),
       tap((res) => {
@@ -32,7 +29,6 @@ export class AuthService {
   login(email, password) {
     const body = { email: email, password: password, returnSecureToken: true };
     const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.firebaseApiKey}`;
-    console.log(url);
     return this.httpClient.post<AuthResponse>(url, body).pipe(
       catchError(this.handleError),
       tap((res) => {
@@ -46,19 +42,31 @@ export class AuthService {
 
     if (!user) return;
 
-    const loggedInUser = new User(user.email, user.id, user._token, user._expiresIn);
+    const loggedInUser = new User(
+      user.email,
+      user.id,
+      user._token,
+      user._expiresIn
+    );
 
     if (loggedInUser.token) {
       this.userSubject.next(loggedInUser);
-      const timerValue = new Date(user._expiresIn).getTime() - new Date().getTime();
+      const timerValue =
+        new Date(user._expiresIn).getTime() - new Date().getTime();
       this.autoLogout(timerValue);
     }
   }
 
   private handleCreateUser(response: AuthResponse) {
-    const expiresInTimestamp = new Date().getTime() + Number(response.expiresIn) * 1000;
+    const expiresInTimestamp =
+      new Date().getTime() + Number(response.expiresIn) * 1000;
     const expiresInDateTime = new Date(expiresInTimestamp);
-    const user = new User(response.email, response.localId, response.idToken, expiresInDateTime);
+    const user = new User(
+      response.email,
+      response.localId,
+      response.idToken,
+      expiresInDateTime
+    );
     this.userSubject.next(user);
     this.autoLogout(Number(response.expiresIn) * 1000);
   }
@@ -82,7 +90,6 @@ export class AuthService {
   }
 
   private handleError(err) {
-    console.log('error occured', err);
 
     let errorMessage = 'An unknown error has occurred';
 

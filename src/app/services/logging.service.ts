@@ -14,7 +14,6 @@ export class LoggingService {
 
   fetchErrors() {
     this.httpClient.get(`${environment.firebaseTaskManagementDbBaseUrl}/log.json`).subscribe((data) => {
-      console.log(data);
     });
   }
 }

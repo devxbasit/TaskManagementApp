@@ -1,12 +1,44 @@
-import { Component } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  NgZoneOptions,
+  OnInit,
+  Output,
+  ViewChild,
+  output,
+  ɵgetEnsureDirtyViewsAreAlwaysReachable,
+} from '@angular/core';
+import { Task } from '../../../models/Task';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-create-task',
-  standalone: true,
-  imports: [],
   templateUrl: './create-task.component.html',
-  styleUrl: './create-task.component.scss'
+  styleUrl: './create-task.component.scss',
 })
-export class CreateTaskComponent {
+export class CreateTaskComponent implements AfterViewInit {
+  @Input() isEditMode = false;
+  @Input() selectedTask: Task;
 
+  @Output() closeForm: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() EmitTaskData: EventEmitter<Task> = new EventEmitter<Task>();
+
+  @ViewChild('taskForm') taskForm: NgForm;
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.taskForm.form.patchValue(this.selectedTask);
+    }, 0);
+  }
+
+  onCloseForm() {
+    this.closeForm.emit(false);
+  }
+
+  OnFormSubmit(form: NgForm) {
+    this.EmitTaskData.emit(form.value);
+    this.closeForm.emit(false);
+  }
 }
