@@ -1,7 +1,7 @@
 <div class="overlay">
     <div class="popup">
         <h2>{{ isEditMode ? 'Update Task' : 'Create a new Task'}}</h2>
-        <a class="close" href="#" (click)="onCloseForm()">&times;</a>
+        <a style="cursor: pointer;" class="close" (click)="onCloseForm()">&times;</a>
         <div class="content">
             <section class="container">
                 <form action="#" class="form" #taskForm="ngForm" (ngSubmit)="OnFormSubmit(taskForm)">
@@ -16,7 +16,7 @@
                     <div class="column">
                         <div class="input-box">
                             <label>Assigned To</label>
-                            <input type="text" name="assignedTo" required ngModel />
+                            <input type="text" placeholder="Enter user name" name="assignedTo" required ngModel />
                         </div>
                         <div class="input-box">
                             <label>Created At</label>
@@ -27,7 +27,6 @@
                         <div class="column">
                             <div class="select-box">
                                 <select name="priority" ngModel>
-                                    <option hidden>Priority</option>
                                     <option value="low">Low</option>
                                     <option value="medium">Medium</option>
                                     <option value="high">High</option>
@@ -36,7 +35,6 @@
                             </div>
                             <div class="select-box">
                                 <select name="status" ngModel>
-                                    <option hidden>Status</option>
                                     <option value="open">Open</option>
                                     <option value="started">Started</option>
                                     <option value="in-progress">In Progress</option>

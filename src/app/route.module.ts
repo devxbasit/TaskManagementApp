@@ -9,7 +9,7 @@ import { HomeComponent } from './home/home.component';
 import { Notfound404Component } from './notfound404/notfound404.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'dashboard/overview', pathMatch: 'full' },
   {
     path: 'dashboard',
     loadChildren: () =>

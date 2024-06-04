@@ -22,7 +22,7 @@ export class CreateTaskComponent implements AfterViewInit {
   @Input() isEditMode = false;
   @Input() selectedTask: Task;
 
-  @Output() closeForm: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() CloseForm: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() EmitTaskData: EventEmitter<Task> = new EventEmitter<Task>();
 
   @ViewChild('taskForm') taskForm: NgForm;
@@ -34,11 +34,12 @@ export class CreateTaskComponent implements AfterViewInit {
   }
 
   onCloseForm() {
-    this.closeForm.emit(false);
+    console.log('emit close form');
+    this.CloseForm.emit(false);
   }
 
   OnFormSubmit(form: NgForm) {
     this.EmitTaskData.emit(form.value);
-    this.closeForm.emit(false);
+    this.CloseForm.emit(false);
   }
 }

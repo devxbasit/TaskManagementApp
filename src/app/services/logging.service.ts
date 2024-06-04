@@ -9,11 +9,15 @@ export class LoggingService {
   httpClient: HttpClient = inject(HttpClient);
 
   logError(data: { statusCode: number; errorMessage; dateTime: Date }) {
-    this.httpClient.post(`${environment.firebaseTaskManagementDbBaseUrl}/log.json`, data).subscribe();
+    debugger;
+    this.httpClient
+      .post(`${environment.firebaseTaskManagementDbBaseUrl}/log.json`, data)
+      .subscribe();
   }
 
   fetchErrors() {
-    this.httpClient.get(`${environment.firebaseTaskManagementDbBaseUrl}/log.json`).subscribe((data) => {
-    });
+    this.httpClient
+      .get(`${environment.firebaseTaskManagementDbBaseUrl}/log.json`)
+      .subscribe((data) => {});
   }
 }

@@ -40,7 +40,14 @@ export class OverviewComponent implements OnInit, OnDestroy {
   OpenCreateTaskForm() {
     this.showCreateTaskForm = true;
     this.editMode = false;
-    this.selectedTask = { title: '', desc: '', assignedTo: '', createdAt: '', priority: '', status: '' };
+    this.selectedTask = {
+      title: '',
+      desc: '',
+      assignedTo: '',
+      createdAt: '',
+      priority: '',
+      status: '',
+    };
   }
 
   showCurrentTaskDetails(id: string | undefined) {

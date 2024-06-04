@@ -1,4 +1,10 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEventType, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpEventType,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Subject, catchError, throwError, tap, map } from 'rxjs';
 import { Task } from '../models/Task';
@@ -17,8 +23,23 @@ export class TaskService {
 
   CreateTask(task: Task) {
     this.httpClient
-      .post<{ name: string }>(`${environment.firebaseTaskManagementDbBaseUrl}/tasks.json`, task)
-      .pipe(catchError(this.handleError))
+      .post<{ name: string }>(
+        `${environment.firebaseTaskManagementDbBaseUrl}tasks.json`,
+        task
+      )
+      .pipe(
+        catchError((err) => {
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            dateTime: new Date(),
+          };
+
+          this.loggingService.logError(errorObj);
+
+          return throwError(() => err);
+        })
+      )
       .subscribe({
         error: (err) => {
           this.errorSubject.next(err);
@@ -29,7 +50,19 @@ export class TaskService {
   DeleteTask(id: string) {
     this.httpClient
       .delete(`${environment.firebaseTaskManagementDbBaseUrl}/tasks/${id}.json`)
-      .pipe(catchError(this.handleError))
+      .pipe(
+        catchError((err) => {
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            dateTime: new Date(),
+          };
+
+          this.loggingService.logError(errorObj);
+
+          return throwError(() => err);
+        })
+      )
       .subscribe({
         error: (err) => {
           this.errorSubject.next(err);
@@ -48,7 +81,17 @@ export class TaskService {
           if (event.type === HttpEventType.Sent) {
           }
         }),
-        catchError(this.handleError)
+        catchError((err) => {
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            dateTime: new Date(),
+          };
+
+          this.loggingService.logError(errorObj);
+
+          return throwError(() => err);
+        })
       )
       .subscribe({
         error: (err) => {
@@ -58,24 +101,51 @@ export class TaskService {
   }
 
   GetAllTasks() {
-    return this.httpClient.get(`${environment.firebaseTaskManagementDbBaseUrl}/tasks.json`).pipe(
-      map((response) => {
-        let tasks = [];
-        for (let key in response) {
-          if (response.hasOwnProperty(key)) {
-            tasks.push({ ...response[key], id: key });
+    return this.httpClient
+      .get(`${environment.firebaseTaskManagementDbBaseUrl}/tasks.json`)
+      .pipe(
+        map((response) => {
+          let tasks = [];
+          for (let key in response) {
+            if (response.hasOwnProperty(key)) {
+              tasks.push({ ...response[key], id: key });
+            }
           }
-        }
-        return tasks;
-      }),
-      catchError(this.handleError)
-    );
+          return tasks;
+        }),
+        catchError((err) => {
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            dateTime: new Date(),
+          };
+
+          this.loggingService.logError(errorObj);
+
+          return throwError(() => err);
+        })
+      );
   }
 
   UpdateTask(id: string | undefined, data: Task) {
     this.httpClient
-      .put(`${environment.firebaseTaskManagementDbBaseUrl}/tasks/${id}.json`, data)
-      .pipe(catchError(this.handleError))
+      .put(
+        `${environment.firebaseTaskManagementDbBaseUrl}/tasks/${id}.json`,
+        data
+      )
+      .pipe(
+        catchError((err) => {
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            dateTime: new Date(),
+          };
+
+          this.loggingService.logError(errorObj);
+
+          return throwError(() => err);
+        })
+      )
       .subscribe({
         error: (err) => {
           this.errorSubject.next(err);
@@ -84,24 +154,14 @@ export class TaskService {
   }
 
   getTaskDetails(id: string | undefined) {
-    return this.httpClient.get(`${environment.firebaseTaskManagementDbBaseUrl}/tasks/${id}.json`).pipe(
-      map((response) => {
-        let task = {};
-        task = { ...response, id: id };
-        return task;
-      })
-    );
-  }
-
-  handleError(err: HttpErrorResponse) {
-    const errorObj = {
-      statusCode: err.status,
-      errorMessage: err.message,
-      dateTime: new Date(),
-    };
-
-    this.loggingService.logError(errorObj);
-
-    return throwError(() => err);
+    return this.httpClient
+      .get(`${environment.firebaseTaskManagementDbBaseUrl}/tasks/${id}.json`)
+      .pipe(
+        map((response) => {
+          let task = {};
+          task = { ...response, id: id };
+          return task;
+        })
+      );
   }
 }
