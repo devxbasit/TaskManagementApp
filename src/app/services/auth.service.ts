@@ -69,6 +69,7 @@ export class AuthService {
     );
     this.userSubject.next(user);
     this.autoLogout(Number(response.expiresIn) * 1000);
+    localStorage.setItem('user', JSON.stringify(user));
   }
 
   autoLogout(expireTime: number) {
@@ -90,7 +91,6 @@ export class AuthService {
   }
 
   private handleError(err) {
-
     let errorMessage = 'An unknown error has occurred';
 
     if (!err.error || !err.error.error) {

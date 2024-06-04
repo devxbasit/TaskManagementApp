@@ -7,9 +7,9 @@
     <!--APP NAVBAR-->
     <div class="app-header-navbar">
         @if (isLoggedIn) {
-            <a routerLink="dashboard/overview">Overview</a>
+        <a routerLink="dashboard/overview">Overview</a>
         <a routerLink="dashboard/stats">Stats</a>
-        <a *ngIf="isLoggedIn" (click)="onLogout()">Logout</a>
+        <a href=""  *ngIf="isLoggedIn" (click)="onLogout()">Logout</a>
         }
 
         @if (!isLoggedIn) {
